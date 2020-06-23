@@ -3,43 +3,43 @@ import re
 lowerMatches = False
 upperMatches = False
 numMatches = False
-spechMatches = False
+specMatches = False
 badMatches = False
 
 
 def main():
-    global userPassword
+    while True:
+        global userPassword
 
-    userPassword = input("Enter the password you want to get reviewed:")
+        print("**Password strength based on a scale of 1-13, 13 being the highest possible score.**")
+        userPassword = input("Enter the password you want to get reviewed: ")
 
-    scanner()
-    getPassword()
+        scanner()
+        getPassword()
 
-    restart = input("Do you want to review another password? Enter yes to continue. ").lower()
+        restart = input("Do you want to review another password? Enter 'yes' to continue. ").lower()
 
-    if restart == "yes":
-        global lowerMatches
-        global upperMatches
-        global numMatches
-        global spechMatches
-        global badMatches
+        if restart != "yes":
+            exit()
+        else:
+            global lowerMatches
+            global upperMatches
+            global numMatches
+            global specMatches
+            global badMatches
 
-        lowerMatches = False
-        upperMatches = False
-        numMatches = False
-        spechMatches = False
-        badMatches = False
-
-        main()
-    else:
-        exit()
-
+            lowerMatches = False
+            upperMatches = False
+            numMatches = False
+            specMatches = False
+            badMatches = False
+        
 
 def scanner():
     global lowerMatches
     global upperMatches
     global numMatches
-    global spechMatches
+    global specMatches
     global badMatches
 
     if re.search("[a-z]", userPassword):
@@ -52,33 +52,140 @@ def scanner():
         numMatches = True
 
     if re.search("[. ! ? > < _ - ( ) * ^ / ]", userPassword):
-        spechMatches = True
+        specMatches = True
 
-    if re.search(r'\babc\b', userPassword) or re.search(r'\bqwerty\b', userPassword) or re.search(r'\bpoiuyt\b', userPassword):
+    bad_abc = 'abc'
+    bad_qwerty = 'qwerty'
+    bad_poiuyt = 'poiuyt'
+
+    if re.search(bad_abc, userPassword) or re.search(bad_qwerty, userPassword) or re.search(bad_poiuyt, userPassword):
         badMatches = True
 
 
 def getPassword():
-    if(len(userPassword) <= 6):
-        print("Your password is very weak.")
+    if(badMatches):
+        print("Score = 1. You password contains bad commonly used patterns.")
+    
+    elif(len(userPassword) <= 6):
+        if(lowerMatches and upperMatches and numMatches and specMatches):
+            print("Score = 5. Your password is very strong, but short.")
 
-    elif(badMatches):
-        print("You password contains bad common used patterns.")
+        elif(lowerMatches and upperMatches and numMatches):
+            print("Score = 4. Your password is strong, but short.")
 
-    elif(len(userPassword) >= 12 and lowerMatches and upperMatches and numMatches and spechMatches):
-            print("Your password is a wall of a password!")
+        elif(lowerMatches and upperMatches and specMatches):
+            print("Score = 4. Your password is strong, but short.")
 
-    elif(len(userPassword) >= 12 and lowerMatches and upperMatches and numMatches and spechMatches):
-        print("Your password is strong")
+        elif(lowerMatches and numMatches and specMatches):
+            print("Score = 4. Your password is strong, but short.")
 
-    elif(len(userPassword) > 6 and len(userPassword) < 12 and lowerMatches and upperMatches and numMatches):
-        print("Your password is decent, but doesn't contain any special characters.")    
+        elif(upperMatches and numMatches and specMatches):
+            print("Score = 4. Your password is strong, but short.")
 
-    elif(len(userPassword) > 6 and len(userPassword) < 12 and lowerMatches and upperMatches):
-        print("Your password is not bad.")
+        elif(lowerMatches and upperMatches):
+            print("Score = 3. Your password is short and weak.")
 
-    elif(len(userPassword) > 6 and len(userPassword) < 12 and lowerMatches):
-        print("Your password is weak.")
+        elif(lowerMatches and numMatches):
+            print("Score = 3. Your password is short and weak.")
+
+        elif(lowerMatches and specMatches):
+            print("Score = 3. Your password is short and weak.")
+
+        elif(upperMatches and numMatches):
+            print("Score = 3. Your password is short and weak.")
+
+        elif(upperMatches and specMatches):
+            print("Score = 3. Your password is short and weak.")
+
+        elif(numMatches and specMatches):
+            print("Score = 3. Your password is short and weak.")
+
+        elif(lowerMatches or upperMatches or numMatches or specMatches):
+            print("Score = 2. Your password is very weak and short.")
+
+        else:
+            print("Score = 2. Your password is very weak and short.")
+
+    elif(len(userPassword) > 6 and len(userPassword) < 12):
+        if(lowerMatches and upperMatches and numMatches and specMatches):
+            print("Score = 9. Your password is very strong, but not long.")
+
+        elif(lowerMatches and upperMatches and numMatches):
+            print("Score = 8. Your password is strong, but not long.")
+
+        elif(lowerMatches and upperMatches and specMatches):
+            print("Score = 8. Your password is strong, but not long.")
+
+        elif(lowerMatches and numMatches and specMatches):
+            print("Score = 8. Your password is strong, but not long.")
+
+        elif(upperMatches and numMatches and specMatches):
+            print("Score = 8. Your password is strong, but not long.")
+
+        elif(lowerMatches and upperMatches):
+            print("Score = 7. Your password is not long and weak.")
+
+        elif(lowerMatches and numMatches):
+            print("Score = 7. Your password is not long and weak.")
+
+        elif(lowerMatches and specMatches):
+            print("Score = 7. Your password is not long and weak.")
+
+        elif(upperMatches and numMatches):
+            print("Score = 7. Your password is not long and weak.")
+
+        elif(upperMatches and specMatches):
+            print("Score = 7. Your password is not long and weak.")
+
+        elif(numMatches and specMatches):
+            print("Score = 7. Your password is not long and weak.")
+
+        elif(lowerMatches or upperMatches or numMatches or specMatches):
+            print("Score = 4. Your password is not long and very weak.")
+
+        else:
+            print("Score = 6. Your password is not long and very weak.") 
+
+    elif(len(userPassword) >= 12):
+        if(lowerMatches and upperMatches and numMatches and specMatches):
+            print("Score = 13. Your password is a wall of a password!")
+
+        elif(lowerMatches and upperMatches and numMatches):
+            print("Score = 12. Your password is strong and long.")
+
+        elif(lowerMatches and upperMatches and specMatches):
+            print("Score = 12. Your password is strong and long.")
+
+        elif(lowerMatches and numMatches and specMatches):
+            print("Score = 12. Your password is strong and long.")
+
+        elif(upperMatches and numMatches and specMatches):
+            print("Score = 12. Your password is strong and long.")
+
+        elif(lowerMatches and upperMatches):
+            print("Score = 11. Your password is long, but not strong enough.")
+
+        elif(lowerMatches and numMatches):
+            print("Score = 11. Your password is long, but not strong enough.")
+
+        elif(lowerMatches and specMatches):
+            print("Score = 11. Your password is long, but not strong enough.")
+
+        elif(upperMatches and numMatches):
+            print("Score = 11. Your password is long, but not strong enough.")
+
+        elif(upperMatches and specMatches):
+            print("Score = 11. Your password is long, but not strong enough.")
+
+        elif(numMatches and specMatches):
+            print("Score = 11. Your password is long, but not strong enough.")
+
+        elif(lowerMatches or upperMatches or numMatches or specMatches):
+            print("Score = 6. Your password is long, but weak.")
+
+        else:
+            print("Score = 10. Your password is long, but weak.") 
+
     else:
         print("You've found a glitch!")
 
